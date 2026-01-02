@@ -1,0 +1,37 @@
+
+
+name: Compilar EXE para Windows
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Descargar código
+      uses: actions/checkout@v3
+    
+    - name: Instalar Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install kivy[base]==2.3.0 pillow==10.0.0 pyinstaller
+    
+    - name: Compilar ejecutable
+      run: |
+        pyinstaller --onefile --windowed --name "EditorTrama" --icon=NONE main.py
+    
+    - name: Subir EXE compilado
+      uses: actions/upload-artifact@v3
+      with:
+        name: EditorTrama-Windows
+        path: dist/EditorTrama.exe
+        retention-days: 30
