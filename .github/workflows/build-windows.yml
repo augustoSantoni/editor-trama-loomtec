@@ -1,36 +1,24 @@
 name: Compilar EXE para Windows
-
 on:
   push:
     branches: [ principal ]
   workflow_dispatch:
-
 jobs:
   build-windows:
     runs-on: windows-latest
-    
     steps:
-    - name: Descargar código
-      uses: actions/checkout@v3
-    
-    - name: Instalar Python 3.11
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-    
     - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
         pip install -r requisitos.txt
         pip install pyinstaller
-    
-    - name: Compilar ejecutable
-      run: |
-        pyinstaller --onefile --windowed --name "EditorTrama" principal.py
-    
-    - name: Subir EXE compilado
-      uses: actions/upload-artifact@v3
+    - name: Compilar
+      run: pyinstaller --onefile --windowed --name "EditorTrama" principal.py
+    - uses: actions/upload-artifact@v3
       with:
         name: EditorTrama-Windows
         path: dist/EditorTrama.exe
-        retention-days: 30
