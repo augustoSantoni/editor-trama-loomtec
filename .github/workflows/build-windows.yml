@@ -1,10 +1,8 @@
-
-
 name: Compilar EXE para Windows
 
 on:
   push:
-    branches: [ main ]
+    branches: [ principal ]
   workflow_dispatch:
 
 jobs:
@@ -23,11 +21,12 @@ jobs:
     - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
-        pip install kivy[base]==2.3.0 pillow==10.0.0 pyinstaller
+        pip install -r requisitos.txt
+        pip install pyinstaller
     
     - name: Compilar ejecutable
       run: |
-        pyinstaller --onefile --windowed --name "EditorTrama" --icon=NONE main.py
+        pyinstaller --onefile --windowed --name "EditorTrama" principal.py
     
     - name: Subir EXE compilado
       uses: actions/upload-artifact@v3
